@@ -13,47 +13,53 @@ export default async function Page() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-
-      <section className="bg-gradient-to-r from-yellow-50 to-orange-50">
-        <div className="max-w-6xl mx-auto px-6 py-16 text-center space-y-4">
-          <h1 className="text-4xl font-bold">
-            Welcome to FoodieHub 👋
+      <section className="bg-gradient-to-br from-yellow-50 to-orange-100">
+        <div className="max-w-6xl mx-auto px-6 py-20 text-center space-y-6">
+          <h1 className="text-5xl font-extrabold tracking-tight text-gray-900">
+            Delicious food,
+            <br /> delivered fast 🍔
           </h1>
 
-          <p className="text-gray-600 text-lg">
-            Fresh meals. Fast delivery. Order your favorite food now.
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Choose from freshly prepared meals and enjoy quick
+            doorstep delivery.
           </p>
 
           <Link
             href="#menu"
-            className="inline-block bg-black text-white px-6 py-3 rounded-xl"
+            className="inline-flex items-center rounded-xl bg-gray-900 px-8 py-3 text-white text-sm font-medium hover:bg-black transition"
           >
-            Explore Menu
+            Browse menu
           </Link>
         </div>
       </section>
 
-      <section id="menu" className="max-w-6xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-semibold mb-8">
-          Popular Dishes
-        </h2>
+      <section
+        id="menu"
+        className="max-w-6xl mx-auto px-6 py-14"
+      >
+        <header className="mb-10">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Popular dishes
+          </h2>
+          <p className="text-gray-500 mt-1">
+            Hand-picked favorites loved by our customers
+          </p>
+        </header>
 
         {items.length === 0 && (
           <p className="text-gray-500">
-            No items found. Please add from Admin dashboard.
+            No items found. Please add from admin dashboard.
           </p>
         )}
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {items.map((item: any) => (
             <MenuItemCard key={item.id} item={item} />
           ))}
         </div>
       </section>
 
-      <footer className="text-center py-6 text-sm text-gray-500 border-t">
-        © 2026 FoodieHub • Built with Next.js
-      </footer>
     </main>
   )
 }

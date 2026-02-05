@@ -9,8 +9,8 @@ export default function OrderStatus() {
   const id = params?.id as string
 
   const [order, setOrder] = useState<any>(null)
-
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
   const fetchOrder = async () => {
     const res = await fetch(`/api/orders?id=${id}`)
     if (!res.ok) return
@@ -26,50 +26,63 @@ export default function OrderStatus() {
   useEffect(() => {
     if (!id) return
 
-    fetchOrder() 
-
+    fetchOrder()
     intervalRef.current = setInterval(fetchOrder, 2000)
 
     return () => {
-      if (intervalRef.current)
-        clearInterval(intervalRef.current)
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [id])
 
   if (!order)
     return (
-      <div className="text-center mt-16 text-gray-500">
-        Loading order...
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-sm text-gray-500">
+        Loading order details…
       </div>
     )
 
   const total = order.items.reduce(
-    (sum: number, i: any) =>
-      sum + i.price * i.quantity,
+    (sum: number, i: any) => sum + i.price * i.quantity,
     0
   )
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">
-            Order Details
-          </h1>
+    <main className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-10 space-y-8">
+        <header className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Order Details
+            </h1>
+            <p className="text-sm text-gray-500">
+              Order #{order.id.slice(-6)}
+            </p>
+          </div>
 
-          <Link
-            href="/"
-            className="text-sm bg-black text-white px-4 py-2 rounded-lg"
-          >
-            ⬅ Home
-          </Link>
-        </div>
+          <div className="flex gap-3">
+            <Link
+              href="/orders"
+              className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+            >
+              ← Orders
+            </Link>
 
-        <div className="bg-white shadow rounded-2xl p-6 text-center">
-          <p className="text-gray-500">Current Status</p>
+            <Link
+              href="/"
+              className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-black transition"
+            >
+              Home
+            </Link>
+          </div>
+        </header>
+
+        <section className="rounded-3xl bg-white border border-gray-200 shadow-sm p-8 text-center">
+          <p className="text-sm text-gray-500">
+            Current Status
+          </p>
 
           <h2
-            className={`text-2xl font-bold mt-2 ${
+            className={`mt-2 text-3xl font-bold ${
               order.status === "Delivered"
                 ? "text-green-600"
                 : "text-orange-600"
@@ -77,44 +90,49 @@ export default function OrderStatus() {
           >
             {order.status}
           </h2>
-        </div>
+        </section>
 
-        <div className="bg-white shadow rounded-2xl p-6 space-y-4">
-          <h3 className="font-semibold text-lg">
+        <section className="rounded-3xl bg-white border border-gray-200 shadow-sm p-6 space-y-5">
+          <h3 className="text-lg font-semibold text-gray-900">
             Items Ordered
           </h3>
 
-          {order.items.map((item: any) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between border-b pb-3"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.image}
-                  className="h-14 w-14 rounded object-cover"
-                />
+          <div className="space-y-4">
+            {order.items.map((item: any) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-12 w-12 rounded-xl object-cover border border-gray-200"
+                  />
 
-                <div>
-                  <p className="font-medium">
-                    {item.name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Qty: {item.quantity}
-                  </p>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {item.name}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Qty {item.quantity} × ₹{item.price}
+                    </p>
+                  </div>
                 </div>
+
+                <p className="text-sm font-semibold text-gray-900">
+                  ₹{item.price * item.quantity}
+                </p>
               </div>
-
-              <p className="font-semibold">
-                ₹{item.price * item.quantity}
-              </p>
-            </div>
-          ))}
-
-          <div className="text-right font-bold pt-3">
-            Total: ₹{total}
+            ))}
           </div>
-        </div>
+
+          <div className="flex justify-end border-t border-gray-200 pt-4">
+            <p className="text-lg font-semibold text-gray-900">
+              Total ₹{total}
+            </p>
+          </div>
+        </section>
       </div>
     </main>
   )
