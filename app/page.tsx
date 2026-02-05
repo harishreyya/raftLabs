@@ -2,7 +2,9 @@ import Link from "next/link"
 import MenuItemCard from "@/components/menu/MenuItemCard"
 
 async function getMenu() {
-  const res = await fetch("http://localhost:3000/api/menu", {
+   const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+
+  const res = await fetch(`${baseUrl}/api/menu`, {
     cache: "no-store"
   })
   return res.json()
