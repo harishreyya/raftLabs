@@ -35,10 +35,17 @@ export async function GET(req: Request) {
 
   if (!order) return Response.json(null)
 
-  const status = getStatusFromTime(order.createdAt)
+  const nextStatus = getStatusFromTime(order.createdAt)
+
+  if (order.status !== nextStatus) {
+    await prisma.order.update({
+      where: { id },
+      data: { status: nextStatus }
+    })
+  }
 
   return Response.json({
     ...order,
-    status
+    status: nextStatus
   })
 }
