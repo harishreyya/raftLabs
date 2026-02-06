@@ -18,7 +18,6 @@ export default function AdminPage() {
 
         <section className="grid lg:grid-cols-2 gap-10 items-start">
           <div className="space-y-8">
-              <MenuForm />
               <MenuTable />
           </div>
 
